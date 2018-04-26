@@ -4,6 +4,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
+[System.Serializable]
 public abstract class SOTree : ScriptableObject {
     public static object source;
     public abstract void Execute();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Collections.Generic;
+using UnityEngine;
 
 public partial class UnitAI : AITargeter{
     public SOTree tree;
@@ -9,9 +10,11 @@ public partial class UnitAI : AITargeter{
     private void Start() {
         AITargeter[] t = gameObject.GetComponentsInChildren<AITargeter>();
         foreach (var item in t) {
+            if (item == this)
+                continue;
             AddToLib(item);
+            AddToLib(item.tagTarget, this);
         }
-        AddToLib(this);
     }
 
     private void Update() {
@@ -31,8 +34,8 @@ public partial class UnitAI {
         return aiLib[tag].ToArray();
     }
 
-    public static void AddToLib(UnitAI targeter) {
-        string key = GetLibKey(targeter);
+    public static void AddToLib(string asKey, UnitAI targeter) {
+        string key = asKey;
         if (!aiLib.ContainsKey(key))
             aiLib.Add(key, new List<UnitAI>());
         aiLib[key].Add(targeter);
@@ -62,6 +65,7 @@ public partial class UnitAI {
     }
 
     public void AddToLib(AITargeter targeter) {
+        Debug.Log("Registered : ");
         string key = GetLibKey(targeter);
         if (!unitTargetLib.ContainsKey(key))
             unitTargetLib.Add(key, new List<AITargeter>());

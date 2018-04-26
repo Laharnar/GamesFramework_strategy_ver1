@@ -1,7 +1,9 @@
-﻿public static class NodeHelper {
+﻿using System;
+
+public static class NodeHelper {
     public static void StandardNodeExecute(this SOTree node) {
         ISOTagNode istn = node as ISOTagNode;
-        if (istn != null)
+        if (istn != null && istn.tag!= "")
             TagExecute(node, istn);
         else 
             node.Execute();

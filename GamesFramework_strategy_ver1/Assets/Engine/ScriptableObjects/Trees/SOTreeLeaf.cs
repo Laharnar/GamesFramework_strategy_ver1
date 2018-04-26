@@ -1,2 +1,3 @@
-﻿public abstract class SOTreeLeaf:SOTree {
+﻿[System.Serializable]
+public abstract class SOTreeLeaf : SOTree {
 }

@@ -6,8 +6,7 @@ using UnityEngine;
 [System.Serializable]
 public class DirectionCommand {
     public Vector3 dir;
-    public int mode = 0; // 0: additive, 1: directive
-    private Vector3 vector3;
+    public MovementMode mode = 0; // 0: additive, 1: directive
 
     public DirectionCommand(Vector3 dir) {
         this.dir = dir;
@@ -46,6 +45,15 @@ public class Movement : MonoBehaviour {
             float moveAmt = speed*Time.deltaTime;
             fullMoveAmt += moveAmt;
             int id = reversedDirections.Count - 1;
+            
+            id = Move(moveAmt, id);
+        } else {
+            startPoint = transform.position;
+        }
+    }
+
+    private int Move(float moveAmt, int id) {
+        if (reversedDirections[id].mode == MovementMode.AdditiveToTransform) {
             if (reversedDirections[id].dir.magnitude < fullMoveAmt + checkRange) {
                 startPoint = transform.position;//reversedDirections[reversedDirections.Count-1]- transform.position;
                 reversedDirections.RemoveAt(id);
@@ -53,13 +61,25 @@ public class Movement : MonoBehaviour {
                 fullMoveAmt = moveAmt;
             }
             if (reversedDirections.Count > 0) {
-                if (reversedDirections[id].mode == 0) {
-                    transform.Translate(reversedDirections[id].dir.normalized * speed * Time.deltaTime);
-                }
+                transform.Translate(reversedDirections[id].dir.normalized * speed * Time.deltaTime);
             }
-        } else {
-            startPoint = transform.position;
+        } else if (reversedDirections[id].mode == MovementMode.SetToUp) {
+            transform.up = reversedDirections[id].dir.normalized;
+
+            startPoint = transform.position;//reversedDirections[reversedDirections.Count-1]- transform.position;
+            reversedDirections.RemoveAt(id);
+            id--;
+            fullMoveAmt = moveAmt;
+        } else if (reversedDirections[id].mode == MovementMode.SetToForward) {
+            transform.forward = reversedDirections[id].dir.normalized;
+
+            startPoint = transform.position;//reversedDirections[reversedDirections.Count-1]- transform.position;
+            reversedDirections.RemoveAt(id);
+            id--;
+            fullMoveAmt = moveAmt;
         }
+
+        return id;
     }
 
     /// <summary>
@@ -92,10 +112,29 @@ public class Movement : MonoBehaviour {
             }
         }
     }
+    /// <summary>
+    /// Convert to directions and add them.
+    /// </summary>
+    /// <param name="points"></param>
+    public void AttachPoints(MovementMode nMode, params Vector3[] points) {
+        if (points.Length > 0) {
+            Vector3 finalPoint = SumDirection() + startPoint;
+            Attach(nMode, points[0] - finalPoint);
+            for (int i = 1; i < points.Length; i++) {
+                Attach(nMode, points[i] - points[i - 1]);
+            }
+        }
+    }
 
     public void Attach(params Vector3[] directions) {
         for (int i = 0; i < directions.Length; i++) {
             reversedDirections.Insert(0, new DirectionCommand(directions[i]));
+        }
+    }
+
+    public void Attach(MovementMode nMode, params Vector3[] directions) {
+        for (int i = 0; i < directions.Length; i++) {
+            reversedDirections.Insert(0, new DirectionCommand(directions[i]) { mode=nMode });
         }
     }
 }
