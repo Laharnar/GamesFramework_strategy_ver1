@@ -2,10 +2,15 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using UnityEngine;
 
+public class TreePointer {
+    object data;
+    Action evt;
+
+    List<TreePointer> children;
+}
 [System.Serializable]
-public abstract class SOTree : ScriptableObject {
+public abstract class SOTree {
     public static object source;
     public abstract void Execute();
 
@@ -45,4 +50,5 @@ public abstract class SOTree : ScriptableObject {
         }
         return null;
     }
+
 }
