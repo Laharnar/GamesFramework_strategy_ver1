@@ -4,6 +4,11 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 
+public class ProxyTree {
+    object data;
+    Action executeCallback;
+}
+
 [System.Serializable]
 public abstract class SOTree : ScriptableObject {
     public static object source;
