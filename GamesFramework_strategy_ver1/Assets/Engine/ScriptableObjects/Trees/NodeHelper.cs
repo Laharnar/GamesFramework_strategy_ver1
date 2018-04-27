@@ -16,7 +16,8 @@ public static class NodeHelper {
             AITargeter[] sources = UnitAI.GetAllTargetersByTag(((ISOTagNode)ISOtagNode).tag);
             for (int i = 0; i < sources.Length; i++) {
                 SOTree.source = sources[i];
-                SOTree.DeepCopyTree(node).Execute();
+                //SOTree.DeepCopyTree(node).Execute();
+                node.Execute();
             }
         }
     }
