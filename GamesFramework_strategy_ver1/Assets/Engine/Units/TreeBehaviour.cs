@@ -2,11 +2,9 @@
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
-
-public partial class UnitAI : AITargeter{
+public partial class TreeBehaviour : AITargeter {
     public SOTree tree;
 
-    
     private void Start() {
         AITargeter[] t = gameObject.GetComponentsInChildren<AITargeter>();
         foreach (var item in t) {
@@ -19,34 +17,33 @@ public partial class UnitAI : AITargeter{
 
     private void Update() {
         SOTree.source = this;
-        tree.StandardNodeExecute();
-        // when all commands are done, get a new set.
-        if (moving.IsIdle) {
-            //RecursiveAttach(repeater, new AITargeter[1] { this });
-        }
+        if (tree)
+            tree.StandardNodeExecute();
     }
 }
-public partial class UnitAI {
 
-    public static Dictionary<string, List<UnitAI>> aiLib = new Dictionary<string, List<UnitAI>>();
 
-    public static UnitAI[] GetAIFromLib(string tag) {
+public partial class TreeBehaviour {
+
+    public static Dictionary<string, List<TreeBehaviour>> aiLib = new Dictionary<string, List<TreeBehaviour>>();
+
+    public static TreeBehaviour[] GetAIFromLib(string tag) {
         return aiLib[tag].ToArray();
     }
 
-    public static void AddToLib(string asKey, UnitAI targeter) {
+    public static void AddToLib(string asKey, TreeBehaviour targeter) {
         string key = asKey;
         if (!aiLib.ContainsKey(key))
-            aiLib.Add(key, new List<UnitAI>());
+            aiLib.Add(key, new List<TreeBehaviour>());
         aiLib[key].Add(targeter);
     }
 
-    static string GetLibKey(UnitAI targeter) {
+    static string GetLibKey(TreeBehaviour targeter) {
         return targeter.tagTarget;
     }
 
     public static AITargeter[] GetAllTargetersByTag(string tag) {
-        UnitAI[] c = aiLib[tag].ToArray();
+        TreeBehaviour[] c = aiLib[tag].ToArray();
         List<AITargeter> allC = new List<AITargeter>();
         foreach (var item in c) {
             AITargeter[] utl = item.GetTargeterstFromLib(tag);

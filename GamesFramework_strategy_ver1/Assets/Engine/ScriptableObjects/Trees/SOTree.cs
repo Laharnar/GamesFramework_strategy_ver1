@@ -12,7 +12,7 @@ public class ProxyTree {
 [System.Serializable]
 public abstract class SOTree : ScriptableObject {
     public static object source;
-    public abstract void Execute();
+    public abstract NodeResult Execute();
 
     public static T DeepCopy<T>(T other) where T : SOTree {
         using (MemoryStream ms = new MemoryStream()) {

@@ -13,9 +13,10 @@ public class IsIdleCond : SOParentNode ,ISOTagNode {
         }
     }
 
-    public override void Execute() {
+    public override NodeResult Execute() {
         if ((source as AITargeter).moving.IsIdle) {
-            child.StandardNodeExecute();
+            return child.StandardNodeExecute();
         }
+        return NodeResult.Failure;
     }
 }

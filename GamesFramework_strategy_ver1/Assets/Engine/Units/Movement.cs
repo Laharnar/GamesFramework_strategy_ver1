@@ -24,7 +24,7 @@ public class Movement : MonoBehaviour {
     [SerializeField] List<DirectionCommand> reversedDirections = new List<DirectionCommand>();
     /*FloatData speedImport = 1f;*/
     public float speed = 1f;
-    public float checkRange = 1f;
+    public float checkRange = 0.1f;
 
     float fullMoveAmt = 0;
     Vector3 startPoint;

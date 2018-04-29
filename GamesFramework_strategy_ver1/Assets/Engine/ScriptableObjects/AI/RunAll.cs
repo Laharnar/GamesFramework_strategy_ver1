@@ -12,9 +12,10 @@ public class RunAll : SOTreeNode,ISOTagNode {
         }
     }
 
-    public override void Execute() {
+    public override NodeResult Execute() {
         for (int i = 0; i < nodes.Count; i++) {
             nodes[i].StandardNodeExecute();
         }
+        return NodeResult.Success;
     }
 }
