@@ -1,6 +1,11 @@
 ﻿using UnityEngine;
-[UnityEngine.CreateAssetMenu(fileName = "New SimpleFiring", menuName = "Framework/AI/New SimpleFiring", order = 1)]
-public class SimpleFiring : SOTreeLeaf, ISOTagNode {
+/// <summary>
+/// 
+/// </summary>
+/// <remarks>Relies on "factions" and "stats" to get cost.</remarks>
+[UnityEngine.CreateAssetMenu(fileName = "New CostBasedFiring", menuName = "Framework/AI/New CostBasedFiring", order = 1)]
+public class CostBasedFiring : SOTreeLeaf, ISOTagNode {
+    public int cost;
     float t;
     public FloatData rate;
 
@@ -17,13 +22,22 @@ public class SimpleFiring : SOTreeLeaf, ISOTagNode {
         }
     }
 
+    public bool InstantFailChecks(AITargeter s) {
+        return Faction.GetMoney(s.stats.faction) < cost;
+    }
+
     public override NodeResult Execute() {
+
         KeyCheck();
         AITargeter s = source as AITargeter;
+        if (InstantFailChecks(s)) {
+            return NodeResult.Failure;
+        }
+
         float t = times[s];
         if (Time.time > t) {
             Instantiate((Transform)bullet.GetValue(), s.transform.position, s.transform.rotation);
-            t = Time.time + (float)rate.GetValue() ;
+            t = Time.time + (float)rate.GetValue();
         }
         times[source as AITargeter] = t;
         return NodeResult.Success;
@@ -35,6 +49,6 @@ public class SimpleFiring : SOTreeLeaf, ISOTagNode {
     }
 
     // source/time
-    public static System.Collections.Generic.Dictionary<AITargeter, float> times= new System.Collections.Generic.Dictionary<AITargeter, float>();
-    
+    public static System.Collections.Generic.Dictionary<AITargeter, float> times = new System.Collections.Generic.Dictionary<AITargeter, float>();
+
 }

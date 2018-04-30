@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
-[UnityEngine.CreateAssetMenu(fileName = "New SimpleFiring", menuName = "Framework/AI/New SimpleFiring", order = 1)]
-public class SimpleFiring : SOTreeLeaf, ISOTagNode {
+[UnityEngine.CreateAssetMenu(fileName = "New ClumpFiring", menuName = "Framework/AI/New ClumpFiring", order = 1)]
+public class ClumpFiring : SOTreeLeaf, ISOTagNode {
     float t;
     public FloatData rate;
 
     public TransformData bullet;
-
+    public int pts = 1;
     public string _tag;
     public string tag {
         get {
@@ -22,8 +22,12 @@ public class SimpleFiring : SOTreeLeaf, ISOTagNode {
         AITargeter s = source as AITargeter;
         float t = times[s];
         if (Time.time > t) {
-            Instantiate((Transform)bullet.GetValue(), s.transform.position, s.transform.rotation);
-            t = Time.time + (float)rate.GetValue() ;
+           Vector3[] pts=  CircleMotion.GenerateCircleOfDirections(1, this.pts);
+            for (int i = 0; i < this.pts; i++) {
+                Transform b = Instantiate((Transform)bullet.GetValue(), s.transform.position,new Quaternion ());
+                b.up = pts[i];
+            }
+            t = Time.time + (float)rate.GetValue();
         }
         times[source as AITargeter] = t;
         return NodeResult.Success;
@@ -35,6 +39,6 @@ public class SimpleFiring : SOTreeLeaf, ISOTagNode {
     }
 
     // source/time
-    public static System.Collections.Generic.Dictionary<AITargeter, float> times= new System.Collections.Generic.Dictionary<AITargeter, float>();
-    
+    public static System.Collections.Generic.Dictionary<AITargeter, float> times = new System.Collections.Generic.Dictionary<AITargeter, float>();
+
 }

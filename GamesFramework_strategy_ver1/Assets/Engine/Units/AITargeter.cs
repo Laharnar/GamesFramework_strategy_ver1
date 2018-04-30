@@ -5,4 +5,5 @@
 public class AITargeter :MonoBehaviour{
     public string tagTarget;
     public Movement moving;
+    public StatAccess stats;
 }
