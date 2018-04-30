@@ -56,7 +56,7 @@ public class ClumpFiring : SOTreeLeaf, ISOTagNode {
         }
     }
 
-    public override void Execute() {
+    public override NodeResult Execute() {
         KeyCheck();
         AITargeter s = source as AITargeter;
         float t = times[s];
@@ -69,6 +69,7 @@ public class ClumpFiring : SOTreeLeaf, ISOTagNode {
             t = Time.time + (float)rate.GetValue();
         }
         times[source as AITargeter] = t;
+        return NodeResult.Success;
     }
 
     private static void KeyCheck() {
