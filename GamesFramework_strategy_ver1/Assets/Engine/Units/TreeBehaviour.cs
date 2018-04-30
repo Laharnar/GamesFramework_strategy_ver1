@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
+
+// Ai root.
 public partial class TreeBehaviour : AITargeter {
     public SOTree tree;
 

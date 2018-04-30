@@ -1,0 +1,1 @@
+﻿Engine contains 0 gameplay rules and can be used for any game.
