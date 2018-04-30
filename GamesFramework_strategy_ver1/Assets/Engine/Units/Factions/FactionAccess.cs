@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-public class StatAccess:MonoBehaviour {
+public class FactionAccess:MonoBehaviour {
 
     public StringData faction;
     

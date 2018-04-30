@@ -7,15 +7,15 @@ public class AITargeter :MonoBehaviour{
     public string tagTarget;
     public Movement moving;
 
-    [SerializeField]StatAccess _stats;
+    [SerializeField]FactionAccess _stats;
 
-    public StatAccess stats {
+    public FactionAccess stats {
         get {
             if (_stats != null)
                 return _stats;
             else {
                 Debug.Log("Trying to reassign StatAcess to parent.");
-                return _stats = GetComponentInParent<StatAccess>();
+                return _stats = GetComponentInParent<FactionAccess>();
             }
         }
     }
