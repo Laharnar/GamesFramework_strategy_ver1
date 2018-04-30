@@ -11,6 +11,7 @@ public partial class Faction :MonoBehaviour{
     private void Start() {
         Faction.Register(this);
     }
+
 }
 
 // Global faction data access
@@ -25,5 +26,9 @@ public partial class Faction {
             Debug.LogError("Null value err.", faction.gameObject);
         }
         factions.Add(faction.factionName, faction);
+    }
+
+    internal static void UseMoney(StringData factionName, int cost) {
+        ((Faction)factions[factionName]).money -= cost;
     }
 }

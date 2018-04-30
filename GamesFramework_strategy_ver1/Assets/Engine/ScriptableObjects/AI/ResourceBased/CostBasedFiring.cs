@@ -5,7 +5,7 @@
 /// <remarks>Relies on "factions" and "stats" to get cost.</remarks>
 [UnityEngine.CreateAssetMenu(fileName = "New CostBasedFiring", menuName = "Framework/AI/New CostBasedFiring", order = 1)]
 public class CostBasedFiring : SOTreeLeaf, ISOTagNode {
-    public int cost;
+    public int cost=1;
     float t;
     public FloatData rate;
 
@@ -23,19 +23,25 @@ public class CostBasedFiring : SOTreeLeaf, ISOTagNode {
     }
 
     public bool InstantFailChecks(AITargeter s) {
-        return Faction.GetMoney(s.stats.faction) < cost;
+        if ( Faction.GetMoney(s.stats.faction) < cost)
+            return true;
+        else
+	    {
+            Faction.UseMoney(s.stats.faction, cost);
+        }
+        return false;
     }
 
     public override NodeResult Execute() {
 
         KeyCheck();
         AITargeter s = source as AITargeter;
-        if (InstantFailChecks(s)) {
-            return NodeResult.Failure;
-        }
 
         float t = times[s];
         if (Time.time > t) {
+            if (InstantFailChecks(s)) {
+                return NodeResult.Failure;
+            }
             Instantiate((Transform)bullet.GetValue(), s.transform.position, s.transform.rotation);
             t = Time.time + (float)rate.GetValue();
         }
