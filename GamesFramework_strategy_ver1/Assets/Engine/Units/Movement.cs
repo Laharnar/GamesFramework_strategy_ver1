@@ -132,6 +132,11 @@ public class Movement : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Add directions.
+    /// </summary>
+    /// <param name="nMode"></param>
+    /// <param name="directions"></param>
     public void Attach(MovementMode nMode, params Vector3[] directions) {
         for (int i = 0; i < directions.Length; i++) {
             reversedDirections.Insert(0, new DirectionCommand(directions[i]) { mode=nMode });

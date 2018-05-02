@@ -6,6 +6,7 @@ public class AITargeter :MonoBehaviour{
 
     public string tagTarget;
     public Movement moving;
+    public AITargeter spawner;
 
     [SerializeField]FactionAccess _stats;
 
@@ -19,4 +20,9 @@ public class AITargeter :MonoBehaviour{
             }
         }
     }
+
+    public void OnSpawned(AITargeter other) {
+        spawner = other;
+    }
+
 }
