@@ -22,7 +22,8 @@ public class SimpleFiring : SOTreeLeaf, ISOTagNode {
         AITargeter s = source as AITargeter;
         float t = times[s];
         if (Time.time > t) {
-            Instantiate((Transform)bullet.GetValue(), s.transform.position, s.transform.rotation);
+            Transform tr = Instantiate((Transform)bullet.GetValue(), s.transform.position, s.transform.rotation);
+            tr.GetComponent<AITargeter>().OnSpawned(s);
             t = Time.time + (float)rate.GetValue() ;
         }
         times[source as AITargeter] = t;

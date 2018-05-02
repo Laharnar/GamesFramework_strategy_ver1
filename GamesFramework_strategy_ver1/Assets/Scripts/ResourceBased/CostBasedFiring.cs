@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
+
 /// <summary>
 /// 
 /// </summary>
@@ -42,7 +44,8 @@ public class CostBasedFiring : SOTreeLeaf, ISOTagNode {
             if (InstantFailChecks(s)) {
                 return NodeResult.Failure;
             }
-            Instantiate((Transform)bullet.GetValue(), s.transform.position, s.transform.rotation);
+            Transform tr = Instantiate((Transform)bullet.GetValue(), s.transform.position, s.transform.rotation);
+            tr.GetComponent<AITargeter>().OnSpawned(s.GetComponentInParent<TreeBehaviour>());
             t = Time.time + (float)rate.GetValue();
         }
         times[source as AITargeter] = t;
