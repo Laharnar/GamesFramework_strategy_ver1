@@ -1,6 +1,7 @@
 ﻿
 // This approach isn't the best, would be better to keep 1 instance in library for every spawn object ever,
 // instead of mono reference.
+// Means Ai sourcers that spawn something by tag nodes.
 public static class Spawner {
 
     /// <summary>

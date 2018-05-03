@@ -5,14 +5,14 @@ public class MoveToEnemy : SOMovementBehaviour {
     AITargeter targeter;
 
     public override NodeResult Execute() {
-        if (Faction.NoEnemies((source as AITargeter).stats)) {
+        if (FactionUnits.NoEnemies((source as AITargeter).stats)) {
             return NodeResult.Failure;
         }
 
         if (!(source as AITargeter).moving.IsIdle) {
             return NodeResult.Failure;
         }
-        targeter = Faction.FindClosestEnemy(source as AITargeter);
+        targeter = FactionUnits.FindClosestEnemy(source as AITargeter);
         (source as AITargeter).moving.Attach(mode,
             GenerateDirPathToTarget(mode, (source as AITargeter), targeter));
         return NodeResult.Success;

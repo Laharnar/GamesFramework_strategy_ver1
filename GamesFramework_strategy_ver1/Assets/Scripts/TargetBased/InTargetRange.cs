@@ -5,9 +5,9 @@ public class InTargetRange : SOTreeLeaf{
     public float range= 1;
     public override NodeResult Execute() {
         AITargeter aiSource = source as AITargeter;
-        if (Faction.NoEnemies((source as AITargeter).stats))
+        if (FactionUnits.NoEnemies((source as AITargeter).stats))
             return NodeResult.Failure;
-        targeter = Faction.FindClosestEnemy(source as AITargeter);
+        targeter = FactionUnits.FindClosestEnemy(source as AITargeter);
         if (Vector3.Distance(targeter.transform.position, aiSource.transform.position) < range) {
             return NodeResult.Success;
         }

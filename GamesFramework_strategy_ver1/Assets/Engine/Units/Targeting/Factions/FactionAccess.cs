@@ -1,4 +1,8 @@
 ﻿using UnityEngine;
+
+/// <summary>
+/// One per unit root.
+/// </summary>
 public class FactionAccess:MonoBehaviour {
 
     public StringData faction;
@@ -7,10 +11,10 @@ public class FactionAccess:MonoBehaviour {
     // Structural Hp does.
 
     private void Start() {
-        Faction.RegisterUnit(this);
+        FactionUnits.RegisterUnit(this);
     }
 
     private void OnDestroy() {
-        Faction.UnregisterUnit(this);
+        FactionUnits.UnregisterUnit(this);
     }
 }

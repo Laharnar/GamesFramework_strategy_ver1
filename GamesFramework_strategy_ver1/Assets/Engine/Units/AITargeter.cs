@@ -8,6 +8,11 @@ public class AITargeter :MonoBehaviour{
 
     public string tagTarget;
     public Movement moving;
+
+    /// <summary>
+    /// Who spawned this object.
+    /// It's only saved on root.
+    /// </summary>
     public AITargeter spawner;
 
     [SerializeField]FactionAccess _stats;
