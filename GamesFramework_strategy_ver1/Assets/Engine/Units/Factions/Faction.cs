@@ -4,6 +4,8 @@ using UnityEngine;
 
 /// <summary>
 /// Standard faction access, one in scene per faction.
+/// 
+/// Needed for global faction stuff(player) like money.
 /// </summary>
 public partial class Faction :MonoBehaviour{
     public StringData factionName;
@@ -11,7 +13,9 @@ public partial class Faction :MonoBehaviour{
     private void Start() {
         Faction.Register(this);
     }
-
+    private void OnDestroy() {
+        Faction.UnregisterFaction(this);
+    }
 }
 
 // Global faction data access
@@ -32,7 +36,9 @@ public partial class Faction {
         ((Faction)factions[factionName]).money -= cost;
     }
 
-
+    internal static void UnregisterFaction(Faction factionAccess) {
+        factions.Remove(factionAccess.factionName);
+    }
 }
 public partial class Faction  {
     static Dictionary<StringData, List<FactionAccess>> factionUnits = new Dictionary<StringData, List<FactionAccess>>();
@@ -78,5 +84,12 @@ public partial class Faction  {
             return false;
         }
         return true;
+    }
+
+    internal static void UnregisterUnit(FactionAccess factionAccess) {
+        factionUnits[factionAccess.faction].Remove(factionAccess);
+        if (factionUnits[factionAccess.faction].Count == 0) {
+            factionUnits.Remove(factionAccess.faction);
+        }
     }
 }

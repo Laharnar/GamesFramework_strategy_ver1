@@ -13,6 +13,7 @@ public abstract class SOMovementBehaviour : SOTreeLeaf {
 public enum MovementMode {
     AdditiveToTransform = 0,
     SetToUp = 1,
-    SetToForward=2
+    SetToForward=2,
+    AdditiveSetForward=3
 }
 

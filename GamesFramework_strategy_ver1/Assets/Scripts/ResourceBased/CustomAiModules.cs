@@ -11,7 +11,7 @@ public class CustomAiModules:MonoBehaviour {
          * */
         Selector root = MkInstance<Selector>();
         Sequence attackTargetBehaviour = MkInstance<Sequence>();
-        attackTargetBehaviour.Add(MkInstance<PathfindToTargetMotion>());
+        attackTargetBehaviour.Add(MkInstance<MoveToEnemy>());
         attackTargetBehaviour.Add(MkInstance<InTargetRange>());
         attackTargetBehaviour.Add(MkInstance<SimpleFiring>());
 

@@ -31,6 +31,8 @@ public class Movement : MonoBehaviour {
 
     public bool IsIdle { get { return reversedDirections.Count == 0; } }
 
+    public bool IsAlmostIdle { get { return reversedDirections.Count == 1; } }
+
     private void Start() {
         for (int i = 0; i < directionsData.Count; i++) {
             reversedDirections.Add(new DirectionCommand(directionsData[directionsData.Count-1-i]));
@@ -77,6 +79,17 @@ public class Movement : MonoBehaviour {
             reversedDirections.RemoveAt(id);
             id--;
             fullMoveAmt = moveAmt;
+        } else if (reversedDirections[id].mode == MovementMode.AdditiveSetForward) {
+            transform.forward = reversedDirections[id].dir.normalized;
+            if (reversedDirections[id].dir.magnitude < fullMoveAmt + checkRange) {
+                startPoint = transform.position;//reversedDirections[reversedDirections.Count-1]- transform.position;
+                reversedDirections.RemoveAt(id);
+                id--;
+                fullMoveAmt = moveAmt;
+            }
+            if (reversedDirections.Count > 0) {
+                transform.Translate(Vector3.forward * speed * Time.deltaTime);
+            }
         }
 
         return id;
@@ -140,6 +153,14 @@ public class Movement : MonoBehaviour {
     public void Attach(MovementMode nMode, params Vector3[] directions) {
         for (int i = 0; i < directions.Length; i++) {
             reversedDirections.Insert(0, new DirectionCommand(directions[i]) { mode=nMode });
+        }
+    }
+
+    private void OnDrawGizmosSelected() {
+        Vector3 start = transform.position;
+        for (int i = 0; i < reversedDirections.Count; i++) {
+            Gizmos.DrawRay(start, reversedDirections[reversedDirections.Count - 1-i].dir);
+            start += reversedDirections[reversedDirections.Count - 1 - i].dir;
         }
     }
 }

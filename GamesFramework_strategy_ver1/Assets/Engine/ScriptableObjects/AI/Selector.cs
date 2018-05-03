@@ -4,7 +4,7 @@
 public class Selector : SOTreeNode {
     public override NodeResult Execute() {
         for (int i = 0; i < nodes.Count; i++) {
-            NodeResult r = nodes[i].Execute();
+            NodeResult r = nodes[i].StandardNodeExecute();
             switch (r) {
                 case NodeResult.Success:
                     return NodeResult.Success;
@@ -21,25 +21,4 @@ public class Selector : SOTreeNode {
         return NodeResult.Failure;
     }
 
-}
-[UnityEngine.CreateAssetMenu(fileName = "New Sequence", menuName = "Framework/AI/New Sequence", order = 1)]
-public class Sequence : SOTreeNode {
-    public override NodeResult Execute() {
-        for (int i = 0; i < nodes.Count; i++) {
-            NodeResult r = nodes[i].Execute();
-            switch (r) {
-                case NodeResult.Success:
-                    break;
-                case NodeResult.Failure:
-                    return NodeResult.Failure;
-                case NodeResult.Running:
-                    break;
-                case NodeResult.None:
-                    break;
-                default:
-                    break;
-            }
-        }
-        return NodeResult.Success;
-    }
 }

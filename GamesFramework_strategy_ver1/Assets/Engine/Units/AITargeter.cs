@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 /// <summary>
 /// Allows us to distribute 1 tagged AI behaviour to 500 sub AI objects.
+/// 
+/// CANNOT BE ON ROOT. Use Tree behaviour instead.
 /// </summary>
 public class AITargeter :MonoBehaviour{
 

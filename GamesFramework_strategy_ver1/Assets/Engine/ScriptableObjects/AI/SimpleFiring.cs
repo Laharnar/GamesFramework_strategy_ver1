@@ -6,6 +6,26 @@ public class SimpleFiring : SOTreeLeaf, ISOTagNode {
 
     public TransformData bullet;
 
+    public override NodeResult Execute() {
+        KeyCheck();
+        AITargeter s = source as AITargeter;
+        float t = times[s];
+        if (Time.time > t) {
+            Transform tr = Instantiate((Transform)bullet.GetValue(), s.transform.position, s.transform.rotation);
+            tr.GetComponent<AITargeter>().OnSpawned(s.GetComponentInParent<TreeBehaviour>());
+            //tr.GetComponent<AITargeter>().OnSpawned(s);
+            t = Time.time + (float)rate.GetValue() ;
+        }
+        times[source as AITargeter] = t;
+        return NodeResult.Success;
+    }
+
+    private static void KeyCheck() {
+        if (source != null && !times.ContainsKey((AITargeter)source))
+            times.Add((AITargeter)source, Time.time);
+    }
+
+
     public string _tag;
     public string tag {
         get {
@@ -16,25 +36,6 @@ public class SimpleFiring : SOTreeLeaf, ISOTagNode {
             _tag = value;
         }
     }
-
-    public override NodeResult Execute() {
-        KeyCheck();
-        AITargeter s = source as AITargeter;
-        float t = times[s];
-        if (Time.time > t) {
-            Transform tr = Instantiate((Transform)bullet.GetValue(), s.transform.position, s.transform.rotation);
-            tr.GetComponent<AITargeter>().OnSpawned(s);
-            t = Time.time + (float)rate.GetValue() ;
-        }
-        times[source as AITargeter] = t;
-        return NodeResult.Success;
-    }
-
-    private static void KeyCheck() {
-        if (source != null && !times.ContainsKey((AITargeter)source))
-            times.Add((AITargeter)source, 0);
-    }
-
     // source/time
     public static System.Collections.Generic.Dictionary<AITargeter, float> times= new System.Collections.Generic.Dictionary<AITargeter, float>();
     

@@ -13,6 +13,7 @@ public class ProxyTree {
 public abstract class SOTree : ScriptableObject {
     public static object source;
     public abstract NodeResult Execute();
+    public bool isActive = true;
 
     public static T DeepCopy<T>(T other) where T : SOTree {
         using (MemoryStream ms = new MemoryStream()) {

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 [UnityEngine.CreateAssetMenu(fileName = "New InTargetRange", menuName = "Framework/AI/New InTargetRange", order = 1)]
-public class InTargetRange : SOTreeLeaf {
+public class InTargetRange : SOTreeLeaf{
     AITargeter targeter;
     public float range= 1;
     public override NodeResult Execute() {
@@ -14,7 +14,14 @@ public class InTargetRange : SOTreeLeaf {
         return NodeResult.Failure;
     }
 
-    private Vector3[] GenerateDirPathToTarget(AITargeter source, AITargeter target) {
-        return new Vector3[1] { (target.transform.position - source.transform.position) / 10 };
+    public string _tag;
+    public string tag {
+        get {
+            return _tag;
+        }
+
+        set {
+            _tag = value;
+        }
     }
 }

@@ -23,11 +23,15 @@ public partial class TreeBehaviour : AITargeter {
         if (tree)
             tree.StandardNodeExecute();
     }
+
 }
 
 
 public partial class TreeBehaviour {
 
+    /// <summary>
+    /// Global Ai library with all objects in scene.
+    /// </summary>
     public static Dictionary<string, List<TreeBehaviour>> aiLib = new Dictionary<string, List<TreeBehaviour>>();
 
     public static TreeBehaviour[] GetAIFromLib(string tag) {
@@ -46,21 +50,36 @@ public partial class TreeBehaviour {
     }
 
     public static AITargeter[] GetAllTargetersByTag(string tag) {
-        TreeBehaviour[] c = aiLib[tag].ToArray();
         List<AITargeter> allC = new List<AITargeter>();
-        foreach (var item in c) {
-            AITargeter[] utl = item.GetTargeterstFromLib(tag);
-            allC.AddRange(utl);
+        if (aiLib.ContainsKey(tag)) {
+            TreeBehaviour[] c = aiLib[tag].ToArray();
+            foreach (var item in c) {
+                AITargeter[] utl = item.GetAiSourcesByTag(tag);
+                allC.AddRange(utl);
+            }
         }
         return allC.ToArray();
     }
 
+    internal static AITargeter[] GetAiSourcesByTagUnderRoot(TreeBehaviour source, string tag) {
+        List<AITargeter> result = new List<AITargeter>();
+        if (aiLib.ContainsKey(tag)) {
+            result.AddRange(source.GetAiSourcesByTag(tag));
+        }
+        return result.ToArray();
+    }
+
+}
+
+public partial class TreeBehaviour {
+
     /// <summary>
+    /// Local collection of tagged sources on this root.
     /// Key:tag+scriptId
     /// </summary>
     Dictionary<string, List<AITargeter>> unitTargetLib = new Dictionary<string, List<AITargeter>>();
 
-    private AITargeter[] GetTargeterstFromLib(string tag) {
+    private AITargeter[] GetAiSourcesByTag(string tag) {
         return unitTargetLib[tag].ToArray();
     }
 

@@ -9,4 +9,8 @@ public class FactionAccess:MonoBehaviour {
     private void Start() {
         Faction.RegisterUnit(this);
     }
+
+    private void OnDestroy() {
+        Faction.UnregisterUnit(this);
+    }
 }

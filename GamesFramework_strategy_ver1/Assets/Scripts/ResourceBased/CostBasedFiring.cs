@@ -54,7 +54,7 @@ public class CostBasedFiring : SOTreeLeaf, ISOTagNode {
 
     private static void KeyCheck() {
         if (source != null && !times.ContainsKey((AITargeter)source))
-            times.Add((AITargeter)source, 0);
+            times.Add((AITargeter)source, Time.time);
     }
 
     // source/time

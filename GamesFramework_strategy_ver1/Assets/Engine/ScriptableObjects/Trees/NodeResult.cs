@@ -2,5 +2,6 @@
     Success,
     Failure,
     Running,
-    None
+    None,
+    Disabled
 }
