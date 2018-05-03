@@ -2,6 +2,10 @@
 
 public static class NodeHelper {
     public static NodeResult StandardNodeExecute(this SOTree node) {
+        if (node == null) {
+            UnityEngine.Debug.Log("Empty node slot in the tree");
+            return NodeResult.None;
+        }
         if (!node.isActive) {
             return NodeResult.Disabled;
         }

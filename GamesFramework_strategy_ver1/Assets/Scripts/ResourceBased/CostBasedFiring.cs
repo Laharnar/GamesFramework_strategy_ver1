@@ -25,11 +25,11 @@ public class CostBasedFiring : SOTreeLeaf, ISOTagNode {
     }
 
     public bool InstantFailChecks(AITargeter s) {
-        if ( Faction.GetMoney(s.stats.faction) < cost)
+        if ( Faction.GetMoney(s) < cost)
             return true;
         else
 	    {
-            Faction.UseMoney(s.stats.faction, cost);
+            Faction.UseMoney(s, cost);
         }
         return false;
     }

@@ -30,6 +30,8 @@ public class AITargeter :MonoBehaviour{
 
     public void OnSpawned(AITargeter other) {
         spawner = other;
+        if (_stats)
+        _stats.OnSpawned(other.transform.root.GetComponent<FactionAccess>().faction);
     }
 
 }

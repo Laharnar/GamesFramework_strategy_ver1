@@ -49,6 +49,17 @@ public partial class FactionUnits  {
         return true;
     }
 
+    internal static void TryUnregisterUnit(FactionAccess factionAccess) {
+        if (factionUnits.ContainsKey(factionAccess.faction)) { 
+            int x = factionUnits[factionAccess.faction].IndexOf(factionAccess);
+            if (x != -1)
+                factionUnits[factionAccess.faction].RemoveAt(x);
+            if (factionUnits[factionAccess.faction].Count == 0) {
+                factionUnits.Remove(factionAccess.faction);
+            }
+        }
+    }
+
     internal static void UnregisterUnit(FactionAccess factionAccess) {
         factionUnits[factionAccess.faction].Remove(factionAccess);
         if (factionUnits[factionAccess.faction].Count == 0) {

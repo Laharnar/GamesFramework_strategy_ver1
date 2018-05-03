@@ -4,6 +4,8 @@ public class Sequence : SOTreeNode {
     // solution: make tags run all only once, with diff results for all(dict for list nodes)
     // solution 2(taken): run only tags that are under some root.(compare root)
     public override NodeResult Execute() {
+        if (nodes.Count == 0)
+            return NodeResult.None;
         for (int i = 0; i < nodes.Count; i++) {
             NodeResult r =  nodes[i].StandardNodeExecute();
             switch (r) {
