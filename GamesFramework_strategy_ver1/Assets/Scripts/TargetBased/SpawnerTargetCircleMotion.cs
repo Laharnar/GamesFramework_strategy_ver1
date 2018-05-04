@@ -13,6 +13,7 @@ public class SpawnerTargetCircleMotion : SOTreeLeaf {
             axis = s.transform.forward;
         else {
             Debug.LogError("Missing spawner source.");
+            return NodeResult.Failure;
         }
         (source as AITargeter).moving.Attach(mode,
             CircleMotion.GenerateCircleOfDirections(aiSource.transform.position, s.transform.position, size, pointsDetail, axis));
