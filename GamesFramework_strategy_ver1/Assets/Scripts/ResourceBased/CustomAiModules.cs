@@ -23,7 +23,26 @@ public class CustomAiModules:MonoBehaviour {
         root.Add(followMothershipBehaviour);
         root.name = "FighterMod";
     }
+    void LAserGunAi() {
+       /* Sequence turnBehaviour // attack
+        TurnToEnemy
+        //IsAimingNearEnemy
+        SimpleFiring
 
+        turn forard// default, idle
+
+        root selector*/
+    }
+    /* lASER Gun ai
+     * look at closest enemy
+     * shoot(laser, auto fast extends between 2 points)
+     * 
+     * */
+    /* 3d flying based on curves
+     * preprocessed into path vectors
+     * 
+     * */
+    
     private T MkInstance<T>() where T:ScriptableObject {
         return ScriptableObject.CreateInstance<T>();
     }

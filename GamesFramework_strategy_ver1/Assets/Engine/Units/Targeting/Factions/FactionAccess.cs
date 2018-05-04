@@ -16,6 +16,8 @@ public class FactionAccess:MonoBehaviour {
     }
 
     private void Start() {
+        if (transform.root!= null)
+            faction = transform.root.GetComponent<FactionAccess>().faction;
         FactionUnits.RegisterUnit(this);
     }
 

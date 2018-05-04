@@ -14,7 +14,6 @@ public partial class TreeBehaviour : AITargeter {
                 continue;
             AddToLib(item);
             AddToLib(item.tagTarget, this);
-
         }
     }
 
@@ -94,5 +93,4 @@ public partial class TreeBehaviour {
     string GetLibKey(AITargeter targeter) {
         return targeter.tagTarget;
     }
-
 }

@@ -13,15 +13,5 @@ public class InTargetRange : SOTreeLeaf{
         }
         return NodeResult.Failure;
     }
-
-    public string _tag;
-    public string tag {
-        get {
-            return _tag;
-        }
-
-        set {
-            _tag = value;
-        }
-    }
+    
 }

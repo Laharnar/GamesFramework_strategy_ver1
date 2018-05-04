@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
-[CreateAssetMenu(fileName = "_MoveToEnemy", menuName = "Framework/AI/New MoveToEnemy", order = 1)]
-public class MoveToEnemy : SOMovementBehaviour {
+[CreateAssetMenu(fileName = "_TurnToEnemy", menuName = "Framework/AI/New TurnToEnemy", order = 1)]
+public class TurnToEnemy : SOMovementBehaviour {
 
     AITargeter targeter;
     public string note = "SetToForw to rotate between 2 points";
@@ -20,14 +20,9 @@ public class MoveToEnemy : SOMovementBehaviour {
     }
 
     private Vector3[] GenerateDirPathToTarget(MovementMode mode, AITargeter source, AITargeter target) {
-        if (mode == MovementMode.AdditiveSetForward)
-            return new Vector3[1] { (target.transform.position - source.transform.position) / 10 };
-        else if (mode == MovementMode.AdditiveToTransform)
-            return new Vector3[1] { source.transform.InverseTransformDirection(target.transform.position - source.transform.position) / 10 };
-        else if (mode == MovementMode.SetToForward) {
+         if (mode == MovementMode.SetToForward) {
             return CircleMotion.GeneratePtToPtMotionOnForw(source, target, 16);
-        }
-        else Debug.Log("Unsupported mode. [PathfindToTargetMotion]"+mode);
+        } else Debug.Log("Unsupported mode. [MoveToEnemy]" + mode);
         return new Vector3[0];
     }
 }

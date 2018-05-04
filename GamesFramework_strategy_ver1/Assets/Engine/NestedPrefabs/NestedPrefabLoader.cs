@@ -7,6 +7,13 @@
 public class NestedPrefabLoader:MonoBehaviour {
     public Transform prefTarget;
     private void Awake() {
-        Instantiate(prefTarget, transform.position, transform.rotation, transform.parent);
+        FullInit(Instantiate(prefTarget, transform.position, transform.rotation, transform.parent));
+
+    }
+
+    public static void FullInit(Transform t) {
+        //if (t.GetComponent<FactionAccess>())
+          //  t.GetComponent<FactionAccess>().faction = t.GetComponentInParent<FactionAccess>().faction;
+        
     }
 }

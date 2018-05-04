@@ -46,6 +46,21 @@ public class CircleMotion : SOTreeLeaf {
         return dirs;
     }
 
+    internal static Vector3[] GeneratePtToPtMotionOnForw(AITargeter source, AITargeter target, int points) {
+        Vector3[] pts = new Vector3[points+1];
+        Vector3 finalDir = target.transform.position - source.transform.position;
+        pts[points] = finalDir;
+        float angle = Vector3.Angle(source.transform.forward, finalDir);
+        float angleRad = angle / 360 * 2 * Mathf.PI;
+
+        for (int i = 0; i < points; i++) {
+            Vector3 rot = Vector3.RotateTowards(source.transform.forward, finalDir, angleRad / points*i, 0);
+            pts[i] = rot;
+            //Vector3 rot = Vector3.up + Vector3.up - axis;
+        }
+        return pts;
+    }
+
     public static Vector3[] GenerateCircleOfDirections(float size, int points) {
         Vector3[] pts = new Vector3[points];
         for (int i = 0; i < points; i++) {
