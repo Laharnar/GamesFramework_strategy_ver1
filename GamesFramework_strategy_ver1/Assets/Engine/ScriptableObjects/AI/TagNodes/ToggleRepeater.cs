@@ -10,6 +10,7 @@ public class ToggleRepeater : SOTreeNode {
         int active = actives[(AITargeter)source];
         active = (active + 1) % nodes.Count;
         actives[(AITargeter)source] = active;
+
         return nodes[active].StandardNodeExecute();
     }
 

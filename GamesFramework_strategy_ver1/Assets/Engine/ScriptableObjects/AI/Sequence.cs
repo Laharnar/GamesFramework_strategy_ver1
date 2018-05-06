@@ -17,6 +17,8 @@ public class Sequence : SOTreeNode {
                     break;
                 case NodeResult.None:
                     break;
+                case NodeResult.Disabled:
+                    break;
                 default:
                     break;
             }

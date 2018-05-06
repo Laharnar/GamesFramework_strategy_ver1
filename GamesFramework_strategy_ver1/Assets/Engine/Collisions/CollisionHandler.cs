@@ -42,31 +42,32 @@ public class CollisionHandler : CollisionProxy {
     internal void Trigger (CollisionProxy source, Collider other) {
         CollisionProxy otherAsProxy = other.GetComponent<CollisionProxy>();
         if (otherAsProxy) {
-            CollisionHandler otherHandler = otherAsProxy as CollisionHandler;
-            if (otherHandler == null)
-                otherHandler = other.GetComponentInParent<CollisionHandler>();
-            if (otherHandler) {
-                //Debug.Log(mask + " "+otherHandler.mask);
-                switch (mask) {
-                    case CollisionMask.All:
+            Debug.Log("Missing collision proxy [1]. Attach proxy to obj with collider and replay.", other.transform);
+            return;
+        }
+        CollisionHandler otherHandler = otherAsProxy as CollisionHandler;
+        if (otherHandler == null)
+            otherHandler = other.GetComponentInParent<CollisionHandler>();
+        if (otherHandler) {
+            //Debug.Log(mask + " "+otherHandler.mask);
+            switch (mask) {
+                // for example for meteors, that damage all factions
+                case CollisionMask.All:
+                    for (int i = 0; i < users.Length; i++) {
+                        users[i].OnTriggered(otherHandler);
+                    }
+                    break;
+                case CollisionMask.OtherFactions:
+                    if (faction!= null && otherHandler.faction!= null && faction.faction != otherHandler.faction.faction )
                         for (int i = 0; i < users.Length; i++) {
                             users[i].OnTriggered(otherHandler);
                         }
-                        break;
-                    case CollisionMask.OtherFactions:
-                        if (faction!= null && otherHandler.faction!= null && faction.faction != otherHandler.faction.faction )
-                            for (int i = 0; i < users.Length; i++) {
-                                users[i].OnTriggered(otherHandler);
-                            }
-                        break;
-                    default:
-                        break;
-                }
-            } else {
-                Debug.Log("Missing collision handler [2]", other.transform);
+                    break;
+                default:
+                    break;
             }
         } else {
-            Debug.Log("Missing collision handler/proxy [1]", other.transform);
+            Debug.Log("Missing collision handler [2]", other.transform);
         }
     }
 }

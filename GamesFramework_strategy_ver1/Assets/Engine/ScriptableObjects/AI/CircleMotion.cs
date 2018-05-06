@@ -61,7 +61,7 @@ public class CircleMotion : SOTreeLeaf {
         return pts;
     }
 
-    public static Vector3[] GenerateCircleOfDirections(float size, int points) {
+    /*public static Vector3[] GenerateCircleOfDirections(float size, int points) {
         Vector3[] pts = new Vector3[points];
         for (int i = 0; i < points; i++) {
             Vector3 vec = new Vector3(Mathf.Cos((float)i / (float)points * 2 * Mathf.PI), Mathf.Sin((float)i / (float)points * Mathf.PI * 2));
@@ -69,16 +69,6 @@ public class CircleMotion : SOTreeLeaf {
             //Vector3 rot = Vector3.up + Vector3.up - axis;
         }
         return pts;
-    }
+    }*/
 
-}
-
-public class DictionaryList<K, VItem> {
-    Dictionary<K, List<VItem>> dict = new Dictionary<K, List<VItem>>();
-    public void Add(K key, VItem val) {
-        if (!dict.ContainsKey(key)) {
-            dict.Add(key, new List<VItem>());
-        }
-        dict[key].Add(val);
-    }
 }

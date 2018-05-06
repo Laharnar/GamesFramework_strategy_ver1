@@ -12,6 +12,7 @@ public class IsIdleCond : SOParentNode ,ISOTagNode {
             _tag = value;
         }
     }
+    public string tool = "[Obsolete]DO NOT USE THIS NODE.";
 
     public override NodeResult Execute() {
         if ((source as AITargeter).moving.IsIdle) {

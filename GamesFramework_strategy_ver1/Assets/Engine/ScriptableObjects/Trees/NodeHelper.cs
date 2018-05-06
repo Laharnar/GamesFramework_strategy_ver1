@@ -24,15 +24,17 @@ public static class NodeHelper {
         if (source==null) {
             UnityEngine.Debug.LogError("A tagged node under tagged node is not supported, because tagged nodes assign non-TreeBehaviour sources." +
                 "Sources can currently be accessed only by root, not by child AiTargetrs.");
+            return NodeResult.None;
         }
         // Execute node n times on every source, with a copy of a node.
         // Performance: Create copy of the tree only once, then replace that node with reference node to the library which contains 1 subtree for every targeter.
-        AITargeter[] sources = TreeBehaviour.GetAiSourcesByTagUnderRoot(source, ((ISOTagNode)ISOtagNode).tag);
+        AITargeter[] sources = GlobalAiData.GetAiSourcesByTagUnderRoot(source, ((ISOTagNode)ISOtagNode).tag);
         if (sources.Length == 0)
             UnityEngine.Debug.Log("No sources with tag("+ ((ISOTagNode)ISOtagNode).tag);
+
+
         for (int i = 0; i < sources.Length; i++) {
             SOTree.source = sources[i];
-            //SOTree.DeepCopyTree(node).Execute();
             node.Execute();
         }
         SOTree.source = source;

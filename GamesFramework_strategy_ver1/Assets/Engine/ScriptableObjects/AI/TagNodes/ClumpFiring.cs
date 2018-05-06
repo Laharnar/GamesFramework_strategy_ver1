@@ -22,7 +22,7 @@ public class ClumpFiring : SOTreeLeaf, ISOTagNode {
         AITargeter s = source as AITargeter;
         float t = times[s];
         if (Time.time > t) {
-           Vector3[] pts=  CircleMotion.GenerateCircleOfDirections(1, this.pts);
+           Vector3[] pts=  CircleMotion.GenerateCircleOfDirections(1, this.pts, s.transform.up);
             for (int i = 0; i < this.pts; i++) {
                 Transform b = Instantiate((Transform)bullet.GetValue(), s.transform.position,new Quaternion ());
                 b.up = pts[i];

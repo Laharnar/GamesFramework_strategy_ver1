@@ -5,9 +5,12 @@
 /// instantiated. Then add this script to it and link it to pref.
 /// </summary>
 public class NestedPrefabLoader:MonoBehaviour {
+
     public Transform prefTarget;
+
     private void Awake() {
-        FullInit(Instantiate(prefTarget, transform.position, transform.rotation, transform.parent));
+        //FullInit(
+        Instantiate(prefTarget, transform.position, transform.rotation, transform.parent);//);
 
     }
 

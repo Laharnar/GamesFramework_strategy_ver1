@@ -14,6 +14,8 @@ public class Selector : SOTreeNode {
                     break;
                 case NodeResult.None:
                     break;
+                case NodeResult.Disabled:
+                    break;
                 default:
                     break;
             }
