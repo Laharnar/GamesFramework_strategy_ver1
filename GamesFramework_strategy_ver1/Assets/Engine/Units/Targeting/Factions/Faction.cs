@@ -36,10 +36,18 @@ public partial class Faction {
     }
 
     public static int GetMoney(AITargeter source) {
+        FactionExistsCheck(source.stats.faction);
         return ((Faction)factions[source.stats.faction]).money;
     }
 
+    private static void FactionExistsCheck(StringData faction) {
+        if (!factions.ContainsKey(faction)) {
+            Debug.Log("Missing faction manager for "+faction+". Add faction script in scene if you want money.");
+        }
+    }
+
     internal static void UseMoney(AITargeter source, int cost) {
+        FactionExistsCheck(source.stats.faction);
         ((Faction)factions[source.stats.faction]).money -= cost;
     }
 }

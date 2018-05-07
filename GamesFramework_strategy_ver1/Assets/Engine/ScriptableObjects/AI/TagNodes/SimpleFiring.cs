@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+
 [UnityEngine.CreateAssetMenu(fileName = "New SimpleFiring", menuName = "Framework/AI/New SimpleFiring", order = 1)]
 public class SimpleFiring : SOTreeLeaf, ISOTagNode {
     float t;
@@ -11,10 +12,16 @@ public class SimpleFiring : SOTreeLeaf, ISOTagNode {
         AITargeter s = source as AITargeter;
         float t = times[s];
         if (Time.time > t) {
-            Transform tr = Instantiate((Transform)bullet.GetValue(), s.transform.position, s.transform.rotation);
-            tr.GetComponent<AITargeter>().OnSpawned(s.GetComponentInParent<TreeBehaviour>());
-            //tr.GetComponent<AITargeter>().OnSpawned(s);
-            t = Time.time + (float)rate.GetValue() ;
+            bool limitOnLastFrame = s.firing.reachedLimitLastFrame;
+            bool limitedCurFrame = s.firing.IsLimited();
+            if (limitOnLastFrame && !limitedCurFrame) // wait 1 full cd before re-firing.
+                t = Time.time + (float)rate.GetValue();
+            else {
+                Transform tr = s.firing.Fire(bullet, s.transform);
+                //Transform tr = Instantiate((Transform)bullet.GetValue(), s.transform.position, s.transform.rotation);
+                //tr.GetComponent<AITargeter>().OnSpawned(s.GetComponentInParent<TreeBehaviour>());
+                t = Time.time + (float)rate.GetValue();
+            }
         }
         times[source as AITargeter] = t;
         return NodeResult.Success;
@@ -24,7 +31,6 @@ public class SimpleFiring : SOTreeLeaf, ISOTagNode {
         if (source != null && !times.ContainsKey((AITargeter)source))
             times.Add((AITargeter)source, Time.time);
     }
-
 
     public string _tag;
     public string tag {

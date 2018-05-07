@@ -11,7 +11,7 @@ public partial class TreeBehaviour {
     /// </summary>
     Dictionary<string, List<AITargeter>> unitTargetLib = new Dictionary<string, List<AITargeter>>();
 
-    private AITargeter[] GetAiSourcesByTag(string tag) {
+    public AITargeter[] GetAiSourcesByTag(string tag) {
         return unitTargetLib[tag].ToArray();
     }
 

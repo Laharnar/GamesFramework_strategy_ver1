@@ -41,7 +41,7 @@ public class CollisionHandler : CollisionProxy {
 
     internal void Trigger (CollisionProxy source, Collider other) {
         CollisionProxy otherAsProxy = other.GetComponent<CollisionProxy>();
-        if (otherAsProxy) {
+        if (otherAsProxy == null) {
             Debug.Log("Missing collision proxy [1]. Attach proxy to obj with collider and replay.", other.transform);
             return;
         }
