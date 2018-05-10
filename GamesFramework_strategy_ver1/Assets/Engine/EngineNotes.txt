@@ -1,1 +1,20 @@
 ﻿Engine contains 0 gameplay rules and can be used for any game.
+
+
+BUILDING - 8.5.2018
+
+MENUS - 8.5.2018
+Menus are built by menu nodes. Nodes trigger certain action.
+Nodes should be connected in gameplay part.
+Nodes can be traversed by prepared commands.
+
+menu open/close: engine
+click space to enter inspect(build) mode. 
+This mode must support building, customizations, tactical, whatever
+
+menu interactions: gameplay
+click tower or tower location to open it's options >> build or upgrade or exit
+
+
+navigation tree: SO's, follow the tree.
+navigate build menu SO's

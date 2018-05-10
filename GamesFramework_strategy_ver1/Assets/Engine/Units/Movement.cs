@@ -120,8 +120,33 @@ public class Movement : MonoBehaviour {
     /// <param name="directions"></param>
     public void Attach(MovementMode nMode, params Vector3[] directions) {
         for (int i = 0; i < directions.Length; i++) {
-            reversedDirections.Insert(0, new DirectionCommand(directions[i]) { mode=nMode });
+            //reversedDirections.Insert(0, new DirectionCommand(directions[i]) { mode = nMode });
+            Vector3[] dirs = Chop(directions[i]);
+            for (int j = 0; j < dirs.Length; j++) {
+                reversedDirections.Insert(0, new DirectionCommand(dirs[j]) { mode = nMode });
+            }
         }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="dirs"></param>
+    /// <returns>Long vector chopped into short ones. </returns>
+    /// <remarks>Might leave a small error because of division.</remarks>
+    public Vector3[] Chop(Vector3 dirs) {
+        List<Vector3> r = new List<Vector3>();
+        float sqrMag = dirs.sqrMagnitude;
+        if (sqrMag > 400) {
+            float len = dirs.magnitude;
+            float steps = len / 20f;
+            for (int i = 0; i < steps; i++) {
+                r.Add(dirs/steps);
+            }
+        } else {
+            return new Vector3[1] { dirs };
+        }
+        return r.ToArray();
     }
 
     private void OnDrawGizmosSelected() {

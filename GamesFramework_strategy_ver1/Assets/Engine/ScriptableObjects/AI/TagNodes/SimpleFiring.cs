@@ -10,26 +10,35 @@ public class SimpleFiring : SOTreeLeaf, ISOTagNode {
     public override NodeResult Execute() {
         KeyCheck();
         AITargeter s = source as AITargeter;
+        Debug.Log(s,s);
         float t = times[s];
-        if (Time.time > t) {
-            bool limitOnLastFrame = s.firing.reachedLimitLastFrame;
-            bool limitedCurFrame = s.firing.IsLimited();
-            if (limitOnLastFrame && !limitedCurFrame) // wait 1 full cd before re-firing.
+        if (Time.time >= t) {
+            /*if (s.Firing == null) {
+                Debug.Log("Missing firing reference, failing node.");
+                return NodeResult.None;
+            }
+            bool limitOnLastFrame = s.Firing.reachedLimitLastFrame;
+            bool limitedCurFrame = s.Firing.IsLimited();
+            if (limitOnLastFrame && !limitedCurFrame) { // wait 1 full cd before re-firing.
                 t = Time.time + (float)rate.GetValue();
-            else {
-                Transform tr = s.firing.Fire(bullet, s.transform);
+                Debug.Log("limiting");
+            } else {*/
+                Transform tr = s.Firing.Fire(bullet, s.transform);
                 //Transform tr = Instantiate((Transform)bullet.GetValue(), s.transform.position, s.transform.rotation);
                 //tr.GetComponent<AITargeter>().OnSpawned(s.GetComponentInParent<TreeBehaviour>());
                 t = Time.time + (float)rate.GetValue();
-            }
+            Debug.Log(rate.GetValue());
+            //}
         }
-        times[source as AITargeter] = t;
+        times[source as AITargeter] = 0;
+            //t;
         return NodeResult.Success;
     }
 
     private static void KeyCheck() {
-        if (source != null && !times.ContainsKey((AITargeter)source))
+        if (source != null && !times.ContainsKey((AITargeter)source)) {
             times.Add((AITargeter)source, Time.time);
+        }
     }
 
     public string _tag;

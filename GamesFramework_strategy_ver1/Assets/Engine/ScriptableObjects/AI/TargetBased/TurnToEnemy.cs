@@ -11,7 +11,7 @@ public class TurnToEnemy : SOMovementBehaviour {
         }
 
         if (!(source as AITargeter).moving.IsIdle) {
-            return NodeResult.Failure;
+            return NodeResult.Running;
         }
         targeter = FactionUnits.FindClosestEnemy(source as AITargeter);
         (source as AITargeter).moving.Attach(mode,
