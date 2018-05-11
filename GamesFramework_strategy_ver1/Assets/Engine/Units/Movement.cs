@@ -11,7 +11,7 @@ public partial class Movement : MonoBehaviour {
     //public List<Vector3> directionsData = new List<Vector3>();
 
     // Directions are taken from back for removing performance. Note: is same, since we insert at front.
-    [SerializeField] List<DirectionCommand> reversedDirections = new List<DirectionCommand>();
+    [SerializeField] List<DirectionCommand> directions = new List<DirectionCommand>();
     /*FloatData speedImport = 1f;*/
     public float speed = 1f;
     public float checkRange = 0.1f;
@@ -19,11 +19,11 @@ public partial class Movement : MonoBehaviour {
     float fullMoveAmt = 0;
     Vector3 startPoint;
 
-    public bool IsIdle { get { return reversedDirections.Count == 0; } }
+    public bool IsIdle { get { return directions.Count == 0; } }
 
-    public bool IsAlmostIdle { get { return reversedDirections.Count == 1; } }
+    public bool IsAlmostIdle { get { return directions.Count == 1; } }
 
-    DirectionCommand activeDir { get { return reversedDirections[reversedDirections.Count - 1]; } }
+    DirectionCommand activeDir { get { return directions[0]; } }
 
     public AxisSubMovement axisRot;
 
@@ -36,7 +36,7 @@ public partial class Movement : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        if (reversedDirections.Count > 0) {
+        if (directions.Count > 0) {
             // move in that dir until in range
             float moveAmt = speed*Time.deltaTime;
             //fullMoveAmt += moveAmt;//
@@ -52,7 +52,7 @@ public partial class Movement : MonoBehaviour {
             if (activeDir.dir.magnitude < fullMoveAmt + checkRange) {
                 ConsumeDirection(moveAmt);
             }
-            if (reversedDirections.Count > 0) {
+            if (directions.Count > 0) {
                 transform.Translate(activeDir.dir.normalized * speed * Time.deltaTime);
             }
         } else if (activeDir.mode == MovementMode.SetToUp) {
@@ -67,7 +67,7 @@ public partial class Movement : MonoBehaviour {
             if (activeDir.dir.magnitude < fullMoveAmt + checkRange) {
                 ConsumeDirection(moveAmt);
             }
-            if (reversedDirections.Count > 0) {
+            if (directions.Count > 0) {
                 transform.Translate(Vector3.forward * speed * Time.deltaTime);
             }
         } else if (activeDir.mode == MovementMode.AxisBasedRotation) {
@@ -78,7 +78,7 @@ public partial class Movement : MonoBehaviour {
 
     private void ConsumeDirection(float moveAmt) {
         startPoint = transform.position;//reversedDirections[reversedDirections.Count-1]- transform.position;
-        reversedDirections.RemoveAt(reversedDirections.Count-1);
+        directions.RemoveAt(directions.Count-1);
         fullMoveAmt = moveAmt;
     }
 
@@ -89,12 +89,11 @@ public partial class Movement : MonoBehaviour {
     /// <param name="count">How many should be summed. -1:all</param>
     public Vector3 SumDirection(int count = -1) {
         if (count == -1) {
-            count = reversedDirections.Count;
+            count = directions.Count;
         }
         Vector3 sum = Vector3.zero;
-        while (count > 0) {
-            count--;
-            sum += reversedDirections[count].dir;
+        for (int i = 0; i < count; i++) {
+            sum += directions[count].dir;
         }
         return sum;
     }
@@ -123,7 +122,7 @@ public partial class Movement : MonoBehaviour {
             //reversedDirections.Insert(0, new DirectionCommand(directions[i]) { mode = nMode });
             Vector3[] dirs = Chop(directions[i]);
             for (int j = 0; j < dirs.Length; j++) {
-                reversedDirections.Insert(0, new DirectionCommand(dirs[j]) { mode = nMode });
+                this.directions.Add( new DirectionCommand(dirs[j]) { mode = nMode });
             }
         }
     }
@@ -151,9 +150,9 @@ public partial class Movement : MonoBehaviour {
 
     private void OnDrawGizmosSelected() {
         Vector3 start = transform.position;
-        for (int i = 0; i < reversedDirections.Count; i++) {
-            Gizmos.DrawRay(start, reversedDirections[reversedDirections.Count - 1-i].dir);
-            start += reversedDirections[reversedDirections.Count - 1 - i].dir;
+        for (int i = 0; i < directions.Count; i++) {
+            Gizmos.DrawRay(start, directions[i].dir);
+            start += directions[i].dir;
         }
     }
 
@@ -162,11 +161,11 @@ public partial class Movement : MonoBehaviour {
     /// </summary>
     /// <param name=""></param>
     public void Fix(MovementMode nMode, Vector3[] path, int num=1) {
-        for (int i = 0; i < num && reversedDirections.Count > 0; i++) {
-            reversedDirections.RemoveAt(reversedDirections.Count-1);
+        for (int i = 0; i < num && directions.Count > 0; i++) {
+            directions.RemoveAt(0);
         }
         for (int i = 0; i < path.Length; i++) {
-            reversedDirections.Add(new DirectionCommand(path[path.Length-1-i]) { mode = nMode });
+            directions.Add(new DirectionCommand(path[i]) { mode = nMode });
         }
     }
 }
