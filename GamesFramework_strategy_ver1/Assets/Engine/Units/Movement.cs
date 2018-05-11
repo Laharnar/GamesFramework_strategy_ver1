@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 /// <summary>
 /// Executes a list of directions.
 /// </summary>
@@ -153,6 +154,19 @@ public partial class Movement : MonoBehaviour {
         for (int i = 0; i < reversedDirections.Count; i++) {
             Gizmos.DrawRay(start, reversedDirections[reversedDirections.Count - 1-i].dir);
             start += reversedDirections[reversedDirections.Count - 1 - i].dir;
+        }
+    }
+
+    /// <summary>
+    /// Fixes current path with new one.
+    /// </summary>
+    /// <param name=""></param>
+    public void Fix(MovementMode nMode, Vector3[] path, int num=1) {
+        for (int i = 0; i < num && reversedDirections.Count > 0; i++) {
+            reversedDirections.RemoveAt(reversedDirections.Count-1);
+        }
+        for (int i = 0; i < path.Length; i++) {
+            reversedDirections.Add(new DirectionCommand(path[path.Length-1-i]) { mode = nMode });
         }
     }
 }

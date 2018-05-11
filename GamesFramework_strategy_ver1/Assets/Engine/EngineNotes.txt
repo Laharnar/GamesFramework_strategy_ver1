@@ -18,3 +18,8 @@ click tower or tower location to open it's options >> build or upgrade or exit
 
 navigation tree: SO's, follow the tree.
 navigate build menu SO's
+
+- added 11.5.2018
+Units/NAVIGATION SPACE
+Allows units to navigate in space around large moving objects, like carriers.
+Nav space should be modifiable to fit certain behaviours.

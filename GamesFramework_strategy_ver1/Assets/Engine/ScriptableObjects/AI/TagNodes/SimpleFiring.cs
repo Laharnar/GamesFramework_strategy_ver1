@@ -6,14 +6,13 @@ public class SimpleFiring : SOTreeLeaf, ISOTagNode {
     public FloatData rate;
 
     public TransformData bullet;
-
     public override NodeResult Execute() {
         KeyCheck();
         AITargeter s = source as AITargeter;
         float t = times[s];
         if (Time.time >= t) {
             if (s.Firing == null) {
-                Debug.Log("Missing firing reference, failing node.");
+                Debug.Log("Missing firing reference, ignoring node.");
                 return NodeResult.None;
             }
             bool limitOnLastFrame = s.Firing.reachedLimitLastFrame;
@@ -21,10 +20,12 @@ public class SimpleFiring : SOTreeLeaf, ISOTagNode {
             if (limitOnLastFrame && !limitedCurFrame) { // wait 1 full cd before re-firing.
                 t = Time.time + (float)rate.GetValue();
             } else {
-                Transform tr = s.Firing.Fire(bullet, s.transform);
-                //Transform tr = Instantiate((Transform)bullet.GetValue(), s.transform.position, s.transform.rotation);
-                //tr.GetComponent<AITargeter>().OnSpawned(s.GetComponentInParent<TreeBehaviour>());
-                t = Time.time + (float)rate.GetValue();
+                if (!limitedCurFrame) {
+                    Transform tr = s.Firing.Fire(bullet, s.transform);
+                    //Transform tr = Instantiate((Transform)bullet.GetValue(), s.transform.position, s.transform.rotation);
+                    //tr.GetComponent<AITargeter>().OnSpawned(s.GetComponentInParent<TreeBehaviour>());
+                    t = Time.time + (float)rate.GetValue();
+                }
             }
         }
         times[source as AITargeter] = t;
