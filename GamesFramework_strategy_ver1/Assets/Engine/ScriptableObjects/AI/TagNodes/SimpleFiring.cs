@@ -10,10 +10,9 @@ public class SimpleFiring : SOTreeLeaf, ISOTagNode {
     public override NodeResult Execute() {
         KeyCheck();
         AITargeter s = source as AITargeter;
-        Debug.Log(s,s);
         float t = times[s];
         if (Time.time >= t) {
-            /*if (s.Firing == null) {
+            if (s.Firing == null) {
                 Debug.Log("Missing firing reference, failing node.");
                 return NodeResult.None;
             }
@@ -21,17 +20,15 @@ public class SimpleFiring : SOTreeLeaf, ISOTagNode {
             bool limitedCurFrame = s.Firing.IsLimited();
             if (limitOnLastFrame && !limitedCurFrame) { // wait 1 full cd before re-firing.
                 t = Time.time + (float)rate.GetValue();
-                Debug.Log("limiting");
-            } else {*/
+            } else {
                 Transform tr = s.Firing.Fire(bullet, s.transform);
                 //Transform tr = Instantiate((Transform)bullet.GetValue(), s.transform.position, s.transform.rotation);
                 //tr.GetComponent<AITargeter>().OnSpawned(s.GetComponentInParent<TreeBehaviour>());
                 t = Time.time + (float)rate.GetValue();
-            Debug.Log(rate.GetValue());
-            //}
+            }
         }
-        times[source as AITargeter] = 0;
-            //t;
+        times[source as AITargeter] = t;
+            
         return NodeResult.Success;
     }
 

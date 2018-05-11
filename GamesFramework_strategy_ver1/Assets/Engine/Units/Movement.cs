@@ -2,15 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 /// <summary>
 /// Executes a list of directions.
 /// </summary>
-public class Movement : MonoBehaviour {
+public partial class Movement : MonoBehaviour {
+    // btw saving points, would take less space than all that adding and removing.
+    //public List<Vector3> directionsData = new List<Vector3>();
 
-    public List<Vector3> directionsData = new List<Vector3>();
-
-    // Directions are taken from back for performance.
+    // Directions are taken from back for removing performance. Note: is same, since we insert at front.
     [SerializeField] List<DirectionCommand> reversedDirections = new List<DirectionCommand>();
     /*FloatData speedImport = 1f;*/
     public float speed = 1f;
@@ -23,10 +22,14 @@ public class Movement : MonoBehaviour {
 
     public bool IsAlmostIdle { get { return reversedDirections.Count == 1; } }
 
+    DirectionCommand activeDir { get { return reversedDirections[reversedDirections.Count - 1]; } }
+
+    public AxisSubMovement axisRot;
+
     private void Start() {
-        for (int i = 0; i < directionsData.Count; i++) {
+        /*for (int i = 0; i < directionsData.Count; i++) {
             reversedDirections.Add(new DirectionCommand(directionsData[directionsData.Count-1-i]));
-        }
+        }*/
         startPoint = transform.position;
     }
 
@@ -35,51 +38,47 @@ public class Movement : MonoBehaviour {
         if (reversedDirections.Count > 0) {
             // move in that dir until in range
             float moveAmt = speed*Time.deltaTime;
+            //fullMoveAmt += moveAmt;//
             fullMoveAmt += moveAmt;
-            int id = reversedDirections.Count - 1;
-            
-            id = Move(moveAmt, id);
+            Move(moveAmt);
         } else {
             startPoint = transform.position;
         }
     }
 
-    private int Move(float moveAmt, int id) {
-        if (reversedDirections[id].mode == MovementMode.AdditiveToTransform) {
-            if (reversedDirections[id].dir.magnitude < fullMoveAmt + checkRange) {
-                id = ConsumeDirection(moveAmt, id);
+    private void Move(float moveAmt) {
+        if (activeDir.mode == MovementMode.AdditiveToTransform) {
+            if (activeDir.dir.magnitude < fullMoveAmt + checkRange) {
+                ConsumeDirection(moveAmt);
             }
             if (reversedDirections.Count > 0) {
-                transform.Translate(reversedDirections[id].dir.normalized * speed * Time.deltaTime);
+                transform.Translate(activeDir.dir.normalized * speed * Time.deltaTime);
             }
-        } else if (reversedDirections[id].mode == MovementMode.SetToUp) {
-            transform.up = reversedDirections[id].dir.normalized;
+        } else if (activeDir.mode == MovementMode.SetToUp) {
+            transform.up = activeDir.dir.normalized;
+            ConsumeDirection(moveAmt);
 
-            id = ConsumeDirection(moveAmt, id);
-
-        } else if (reversedDirections[id].mode == MovementMode.SetToForward) {
-            transform.forward = reversedDirections[id].dir.normalized;
-
-            id = ConsumeDirection(moveAmt, id);
-        } else if (reversedDirections[id].mode == MovementMode.AdditiveSetForward) {
-            transform.forward = reversedDirections[id].dir.normalized;
-            if (reversedDirections[id].dir.magnitude < fullMoveAmt + checkRange) {
-                id = ConsumeDirection(moveAmt, id);
+        } else if (activeDir.mode == MovementMode.SetToForward) {
+            transform.forward = activeDir.dir.normalized;
+            ConsumeDirection(moveAmt);
+        } else if (activeDir.mode == MovementMode.AdditiveSetForward) {
+            transform.forward = activeDir.dir.normalized;
+            if (activeDir.dir.magnitude < fullMoveAmt + checkRange) {
+                ConsumeDirection(moveAmt);
             }
             if (reversedDirections.Count > 0) {
                 transform.Translate(Vector3.forward * speed * Time.deltaTime);
             }
+        } else if (activeDir.mode == MovementMode.AxisBasedRotation) {
+            axisRot.targetDir = activeDir.dir;
+            ConsumeDirection(moveAmt);
         }
-
-        return id;
     }
 
-    private int ConsumeDirection(float moveAmt, int id) {
+    private void ConsumeDirection(float moveAmt) {
         startPoint = transform.position;//reversedDirections[reversedDirections.Count-1]- transform.position;
-        reversedDirections.RemoveAt(id);
-        id--;
+        reversedDirections.RemoveAt(reversedDirections.Count-1);
         fullMoveAmt = moveAmt;
-        return id;
     }
 
     /// <summary>
@@ -154,6 +153,36 @@ public class Movement : MonoBehaviour {
         for (int i = 0; i < reversedDirections.Count; i++) {
             Gizmos.DrawRay(start, reversedDirections[reversedDirections.Count - 1-i].dir);
             start += reversedDirections[reversedDirections.Count - 1 - i].dir;
+        }
+    }
+}
+public partial class Movement : MonoBehaviour {
+    public Transform xRot, yRot, zRot;
+    [HideInInspector] public Vector3 targetPoint;
+    public Vector3 targetDir = Vector3.one;
+
+    private void AxisBasedRotation() {
+
+        Vector3 dir = targetPoint - transform.position;//targetDir;
+        //targetPoint = transform.position + dir;
+        if (yRot) {
+            Vector3 yDir = targetPoint - yRot.position;
+            //yDir.y = yRot.right.y;
+            yRot.right = yDir;
+            yRot.transform.localRotation = Quaternion.Euler(0, yRot.transform.localEulerAngles.y, 0);
+        }
+        if (xRot) {// untested
+            Vector3 xDir = targetPoint - xRot.position;
+            //xDir.x = xRot.right.x;
+            xRot.right = xDir;
+            xRot.transform.localRotation = Quaternion.Euler(xRot.transform.localEulerAngles.x, 0, 0);
+        }
+        if (zRot) {
+            Vector3 zDir = targetPoint - zRot.position;
+            //zDir.z = zRot.right.z;
+            //zDir.y = zRot.parent.right.y;// zRot.right.z;
+            zRot.right = zDir;
+            zRot.transform.localRotation = Quaternion.Euler(0, 0, zRot.transform.localEulerAngles.z);
         }
     }
 }

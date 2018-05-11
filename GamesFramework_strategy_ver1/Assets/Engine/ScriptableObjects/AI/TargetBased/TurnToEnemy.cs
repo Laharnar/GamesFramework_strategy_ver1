@@ -20,9 +20,12 @@ public class TurnToEnemy : SOMovementBehaviour {
     }
 
     private Vector3[] GenerateDirPathToTarget(MovementMode mode, AITargeter source, AITargeter target) {
-         if (mode == MovementMode.SetToForward) {
+        if (mode == MovementMode.SetToForward) {
             return CircleMotion.GeneratePtToPtMotionOnForw(source, target, 16);
-        } else Debug.Log("Unsupported mode. [MoveToEnemy]" + mode);
+        } else if (mode == MovementMode.AxisBasedRotation) {
+            return new Vector3[1] { target.transform.position - source.transform.position }; //CircleMotion.GeneratePtToPtMotionOnForw(source.GetComponent<AxisSubMovement>().yRot.GetComponent<AITargeter>(), target, 16);
+        } else 
+            Debug.Log("Unsupported mode. [MoveToEnemy]" + mode);
         return new Vector3[0];
     }
 }
