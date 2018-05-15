@@ -19,7 +19,47 @@ click tower or tower location to open it's options >> build or upgrade or exit
 navigation tree: SO's, follow the tree.
 navigate build menu SO's
 
-- added 11.5.2018
+***********
 Units/NAVIGATION SPACE
+- added 11.5.2018
 Allows units to navigate in space around large moving objects, like carriers.
 Nav space should be modifiable to fit certain behaviours.
+It should work realtime.
+
+A. Influence space
+It's like fact, unless random decisions(enter or leave field) are assigned to singular moves.
+Can be used for group flying, like ants. Nope can't those are random.
+Can be used as state space.
+Relies on unit in area response.
+Actions are assigned probabilites, or "best direction".
+Could use local nav space
+
+B. Local avoidance
+Problem with pathing around things, but could work well, since we don't have complex obstacles.
+Relies on zone to zone response.
+High calculation? n^2
+
+E. avoidance-influence space
+Combined zone to area
+Problem-> what to calc danger from
+Collision detection like with zones.
+Square influence space to determine strenght of behaviour.
+Could also just be function for dist in zone.
+
+F. Flocking behaviour
+Great for fighters. DO IT.
+Idk how it would work with enemies. Layers?
+Flock away from enemies, while going to target? Should work.
+Can add small reward areas around ship.
+
+
+no C. Local 3d nav space
+Highly accurate, but not smooth.
+Also needs handmade setup.
+
+no D. Local unit nav space
+Every unit has general local navigational targets that it can turn to.
+Could be combined into go left/right-up ai.
+I did this once instead of directions, it was kinda mehh.
+
+***********

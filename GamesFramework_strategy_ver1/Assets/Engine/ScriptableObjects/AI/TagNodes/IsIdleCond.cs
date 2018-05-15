@@ -15,7 +15,7 @@ public class IsIdleCond : SOParentNode ,ISOTagNode {
     public string tool = "[Obsolete]DO NOT USE THIS NODE.";
 
     public override NodeResult Execute() {
-        if ((source as AITargeter).moving.IsIdle) {
+        if ((source as AITargeter).movingData.IsIdle) {
             return child.StandardNodeExecute();
         }
         return NodeResult.Failure;

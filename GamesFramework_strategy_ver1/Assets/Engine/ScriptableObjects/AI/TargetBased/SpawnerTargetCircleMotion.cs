@@ -15,7 +15,7 @@ public class SpawnerTargetCircleMotion : SOTreeLeaf {
             Debug.LogError("Missing spawner source. Ignoring node.", aiSource);
             return NodeResult.Failure;
         }
-        (source as AITargeter).moving.Attach(mode,
+        (source as AITargeter).movingData.Attach(mode,
             CircleMotion.GenerateCircleOfDirections(aiSource.transform.position, s.transform.position, size, pointsDetail, axis));
         return NodeResult.Success;
     }

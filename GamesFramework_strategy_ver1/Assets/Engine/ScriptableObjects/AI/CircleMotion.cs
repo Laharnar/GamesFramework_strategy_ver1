@@ -9,7 +9,7 @@ public class CircleMotion : SOTreeLeaf {
     public Vector3 axis;
 
     public override NodeResult Execute() {
-        (source as AITargeter).moving.Attach(mode,
+        (source as AITargeter).movingData.Attach(mode,
             GenerateCircleOfDirections(size, pointsDetail, axis));
         return NodeResult.Success;
     }

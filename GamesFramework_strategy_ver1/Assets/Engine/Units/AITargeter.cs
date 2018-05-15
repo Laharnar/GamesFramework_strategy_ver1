@@ -1,13 +1,31 @@
 ﻿using UnityEngine;
+
+public interface IAISource {
+
+}
 /// <summary>
 /// Allows us to distribute 1 tagged AI behaviour to 500 sub AI objects.
 /// 
 /// CANNOT BE ON ROOT. Use Tree behaviour instead.
 /// </summary>
-public class AITargeter :MonoBehaviour{
+public class AITargeter : MonoBehaviour, IAISource{
+    public SteeringMovement move;
 
     public string tagTarget;
-    public Movement moving;
+    public CommandData _movingData;
+    public CommandData movingData {
+        get {
+            if (_movingData == null) {
+                _movingData = GetComponent<CommandData>();
+                Debug.Log("Looking for missing component: CommandData", gameObject);
+                if (_movingData == null) {
+                    _movingData = gameObject.AddComponent<CommandData>();
+                    Debug.Log("Adding missing component: CommandData", gameObject);
+                }
+            }
+            return _movingData;
+        }
+    }
 
     /// <summary>
     /// Who spawned this object.

@@ -7,7 +7,7 @@ public class RandomPointInArea : SOMovementBehaviour {
         point = new Vector3(
             UnityEngine.Random.Range(-w, w), 
             UnityEngine.Random.Range(-l, l), 0);
-        (source as AITargeter).moving.AttachPoints(mode, point);
+        (source as AITargeter).movingData.AttachPoints(mode, point);
         return NodeResult.Success;
     }
 }
