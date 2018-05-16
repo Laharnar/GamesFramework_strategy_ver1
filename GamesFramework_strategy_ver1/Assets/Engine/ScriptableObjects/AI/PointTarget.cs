@@ -5,7 +5,7 @@ public class PointTarget : SOMovementBehaviour {
     public override NodeResult Execute() {
         // Point is simply data
         AITargeter target = (AITargeter)source;
-        target.movingData.AttachPoints(mode, point);
+        target.AttachPoint(mode, point);
         return NodeResult.Success;
     }
 }

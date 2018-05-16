@@ -7,7 +7,7 @@ public class InTargetRange : SOTreeLeaf{
         AITargeter aiSource = source as AITargeter;
         if (FactionUnits.NoEnemies((source as AITargeter).stats))
             return NodeResult.Failure;
-        targeter = FactionUnits.FindClosestEnemy(source as AITargeter);
+        targeter = (source as AITargeter).FindClosestEnemy();
         if (Vector3.Distance(targeter.transform.position, aiSource.transform.position) < range) {
             return NodeResult.Success;
         }

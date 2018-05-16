@@ -4,7 +4,7 @@ public class SteeringFindTarget : SOTreeLeaf {
     SteeringMode mode;
     public override NodeResult Execute() {
         AITargeter target = source as AITargeter;
-        target.move.target = FactionUnits.FindClosestEnemy(target);
+        target.move.target = target.FindClosestEnemy();
         return NodeResult.Success;
     }
 }

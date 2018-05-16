@@ -16,7 +16,11 @@ public enum SteeringMode {
     Arrival,
     Pursuit,
     Evade,
-    Wander
+    Wander,
+    PathFollow,
+    FollowLeader,
+    CollisionAvoidance,
+    Separation
 }
 
 public partial class SteeringMovement:MonoBehaviour, IBoid {
@@ -29,7 +33,7 @@ public partial class SteeringMovement:MonoBehaviour, IBoid {
     // seek vars
     public AITargeter target;
 
-    // wander vars
+    //wander vars
     const float CIRCLE_DISTANCE = 4;
     const float CIRCLE_RADIUS = 2;
     const float ANGLE_CHANGE = 10;
@@ -37,6 +41,10 @@ public partial class SteeringMovement:MonoBehaviour, IBoid {
 
     //public SteeringMode mode = SteeringMode.Pursuit;
     Vector3 steering = new Vector3();
+
+    // collision avoidance
+    const float MAX_SEE_AHEAD = 20f;
+    const float MAX_AVOID_FORCE = 1f;
 
     /// <summary>
     /// Executes a single steering calculation
@@ -59,20 +67,32 @@ public partial class SteeringMovement:MonoBehaviour, IBoid {
             case SteeringMode.Evade:
                 steering += Evade(target.GetComponent<SteeringMovement>());
                 break;
+            case SteeringMode.CollisionAvoidance:
+                steering += CollisionAvoidance();
+                break;
             case SteeringMode.Wander:
                 steering += Wander();
+                break;
+            case SteeringMode.PathFollow:
+                steering += PathFollowing();
+                break;
+            case SteeringMode.FollowLeader:
+                steering += FollowLeader(target.GetComponent<SteeringMovement>());
+                break;
+            case SteeringMode.Separation:
+                steering += Separation(GetComponent<Agent>());
                 break;
             default:
                 break;
         }
     }
-    private void Update() {
+    /*private void Update() {
         steering = Vector3.zero;//= Seek(target.transform.position); // assuming the character is seeking something
         steering = steering + PathFollowing();
 
 
         UpdateSteering();
-    }
+    }*/
 
     public void UpdateSteering() {
         //velocity = Seek(target.position);
@@ -164,8 +184,6 @@ public partial class SteeringMovement:MonoBehaviour, IBoid {
         return wanderForce;
     }
 
-    const float MAX_SEE_AHEAD = 20f;
-    const float MAX_AVOID_FORCE = 1f;
     public Vector3 CollisionAvoidance() {
         Vector3 ahead = transform.position + velocity.normalized * MAX_SEE_AHEAD;
         float dynamic_length = velocity.magnitude / speed;
@@ -371,8 +389,8 @@ public partial class SteeringMovement {
             v *= -1;
             brake = brake + v;
             brake = brake +Separation(GetComponent<Agent>());
-            if (distance(position, neighbor.position) <= MAX_QUEUE_RADIUS) {
-                velocity.scaleBy(0.3);
+            if (Vector3.Distance(transform.position, neighbor.transform.position) <= MAX_QUEUE_RADIUS) {
+                velocity *= 0.3f;
             }
         }
      
@@ -383,7 +401,7 @@ public partial class SteeringMovement {
         Vector3 steering = Seek(new Vector3()); // seek the doorway
         steering = steering + CollisionAvoidance(); // avoid obstacles
         steering = steering + Queue(); // queue along the way
-        return steering,
+        return steering;
     }
 }
 

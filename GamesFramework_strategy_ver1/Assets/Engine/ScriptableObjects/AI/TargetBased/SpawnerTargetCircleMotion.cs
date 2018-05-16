@@ -8,15 +8,15 @@ public class SpawnerTargetCircleMotion : SOTreeLeaf {
 
     public override NodeResult Execute() {
         AITargeter aiSource = source as AITargeter;
-        AITargeter s = Spawner.GetSpawnerOfSource(source as AITargeter);
-        if (s)
-            axis = s.transform.forward;
+        AITargeter spawnedBy = Spawner.GetSpawnerOfSource(source as AITargeter);
+        if (spawnedBy)
+            axis = spawnedBy.transform.forward;
         else {
             Debug.LogError("Missing spawner source. Ignoring node.", aiSource);
             return NodeResult.Failure;
         }
-        (source as AITargeter).movingData.Attach(mode,
-            CircleMotion.GenerateCircleOfDirections(aiSource.transform.position, s.transform.position, size, pointsDetail, axis));
+        aiSource.AttachPathOfDirs(mode,
+            CircleMotion.GenerateCircleOfDirections(aiSource.transform.position, spawnedBy.transform.position, size, pointsDetail, axis));
         return NodeResult.Success;
     }
 }

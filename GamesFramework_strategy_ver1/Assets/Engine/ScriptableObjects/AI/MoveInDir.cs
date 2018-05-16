@@ -7,7 +7,7 @@ public class MoveInDir:SOMovementBehaviour {
             //Vector3 dir = point;
             // Point is simply data
             AITargeter target = (AITargeter)source;
-            target.movingData.Attach(mode, point);
+            target.AttachDirection(mode, point);
             return NodeResult.Success;
         }
         return NodeResult.Failure;

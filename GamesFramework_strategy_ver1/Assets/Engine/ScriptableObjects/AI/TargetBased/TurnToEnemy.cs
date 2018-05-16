@@ -6,16 +6,17 @@ public class TurnToEnemy : SOMovementBehaviour {
     public string note = "SetToForw to rotate between 2 points";
 
     public override NodeResult Execute() {
-        if (FactionUnits.NoEnemies((source as AITargeter).stats)) {
+        AITargeter src = source as AITargeter;
+        if (FactionUnits.NoEnemies(src.stats)) {
             return NodeResult.Failure;
         }
 
-        if (!(source as AITargeter).movingData.IsIdle) {
+        if (!src.movingData.IsIdle) {
             return NodeResult.Running;
         }
-        targeter = FactionUnits.FindClosestEnemy(source as AITargeter);
-        (source as AITargeter).movingData.Attach(mode,
-            GenerateDirPathToTarget(mode, (source as AITargeter), targeter));
+        targeter = src.FindClosestEnemy();
+        src.AttachPathOfDirs(mode,
+            GenerateDirPathToTarget(mode, src, targeter));
         return NodeResult.Success;
     }
 

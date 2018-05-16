@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 public class AgentGroup:MonoBehaviour {
+
     public static Dictionary<string, AgentGroup> groups = new Dictionary<string, AgentGroup>();
 
-    
     public float alignmentWeight = 1f;
     public float cohesionWeight = 1f;
     public float separationWeight = 1f;
     public float effectDistance = float.MaxValue;
     public List<Agent> agentArray = new List<Agent>();
-
 
     private void Update() {
         for (int i = 0; i < agentArray.Count; i++) {
@@ -82,9 +81,8 @@ public class Agent : MonoBehaviour {
         foreach (Agent agent in agentArray) {
             if (agent != myAgent) {
                 if (Vector3.Distance(myAgent.transform.position, agent.transform.position) < dist) {
-                    v.x += data.activeDir.dir.x;// agent.velocity.x;
-                    v.y += data.activeDir.dir.y;// agent.velocity.y;
-                    v.z += data.activeDir.dir.z;// agent.velocity.y;
+                    Vector3 dir = agent.GetComponent<Agent>().data.activePoint.GetMovePoint()- agent.transform.position;
+                    v += dir;// agent.velocity.x;
                     neighborCount++;
                 }
             }
@@ -108,9 +106,7 @@ public class Agent : MonoBehaviour {
         foreach (Agent agent in agentArray) {
             if (agent != myAgent) {
                 if (Vector3.Distance(myAgent.transform.position, agent.transform.position) < dist) {
-                    v.x += agent.transform.position.x;
-                    v.y += agent.transform.position.y;
-                    v.z += agent.transform.position.z;
+                    v += agent.transform.position;
                     neighborCount++;
                 }
             }
@@ -119,9 +115,7 @@ public class Agent : MonoBehaviour {
         if (neighborCount == 0)
             return v;
 
-        v.x /= neighborCount;
-        v.y /= neighborCount;
-        v.z /= neighborCount;
+        v /= neighborCount;
         v = new Vector3(v.x - myAgent.transform.position.x, v.y - myAgent.transform.position.y, v.z - myAgent.transform.position.z);
         v = v.normalized;
         return v;
